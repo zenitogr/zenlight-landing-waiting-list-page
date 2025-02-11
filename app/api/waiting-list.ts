@@ -20,7 +20,7 @@ app.post('/api/waiting-list', async (req, res) => {
         // Send confirmation email using SendGrid
         const msg = {
             to: `${email}`,
-            from: 'your@sendgrid.from.email',
+            from: 'zenlight-mailer@em3154.zenlight.app',
             subject: 'Thank you for joining our waiting list!',
             text: `Hello, thank you for joining our waiting list. We'll notify you when we launch.`,
         };
