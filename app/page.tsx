@@ -82,9 +82,9 @@ export default function Home() {
       <div className="fixed top-4 right-4">
         <button
           onClick={toggleTheme}
-          className="cyberpunk-button px-4 py-2 rounded-lg"
+          className="cyberpunk-button px-6 py-2 rounded-lg inline-flex items-center gap-2"
         >
-          {theme === 'light' ? '🌙' : '☀️'}
+          {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
         </button>
       </div>
 
@@ -92,7 +92,7 @@ export default function Home() {
         <main className="flex flex-col items-center row-start-2 gap-8 w-full max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="gradient-text text-4xl sm:text-6xl font-bold mb-4 animate-float">
-              Join the Zenlight Revolution
+              Join the ZenLight Revolution
             </h1>
             <p className="text-xl opacity-80">Experience the future of development</p>
           </div>
@@ -152,7 +152,7 @@ export default function Home() {
         </main>
 
         <footer className="flex flex-wrap items-center justify-center row-start-3 gap-6 text-sm opacity-70">
-          <p>© 2024 Zenlight. All rights reserved.</p>
+          <p>© 2024 ZenLight. All rights reserved.</p>
         </footer>
       </div>
     </div>
