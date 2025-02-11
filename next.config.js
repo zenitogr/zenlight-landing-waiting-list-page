@@ -3,7 +3,9 @@ dotenv.config({ path: './sendgrid.env' });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* ...existing config... */
+  env: {
+    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+  },
 };
 
 module.exports = nextConfig;

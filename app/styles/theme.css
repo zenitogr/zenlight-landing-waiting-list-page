@@ -1,0 +1,72 @@
+:root {
+  --primary-glow: conic-gradient(from 180deg at 50% 50%,
+    #ff00ff 0deg,
+    #00ffff 180deg,
+    #ff00ff 360deg);
+  --secondary-glow: radial-gradient(
+    rgba(255, 0, 255, 0.5),
+    rgba(0, 255, 255, 0.5)
+  );
+  
+  /* Light theme */
+  --bg-light: #f0f0f0;
+  --text-light: #1a1a1a;
+  --primary-light: #ff00ff;
+  --secondary-light: #00ffff;
+  --accent-light: #ff00aa;
+  
+  /* Dark theme */
+  --bg-dark: #0a0a0f;
+  --text-dark: #ffffff;
+  --primary-dark: #ff00ff;
+  --secondary-dark: #00ffff;
+  --accent-dark: #ff00aa;
+  
+  /* Common */
+  --gradient-primary: linear-gradient(45deg, var(--primary-dark), var(--secondary-dark));
+  --gradient-hover: linear-gradient(45deg, var(--secondary-dark), var(--primary-dark));
+}
+
+/* Light theme styles */
+.light {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+}
+
+/* Dark theme styles */
+.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+.cyberpunk-button {
+  background: var(--gradient-primary);
+  border: 2px solid transparent;
+  border-image: var(--gradient-primary);
+  border-image-slice: 1;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px currentColor;
+}
+
+.cyberpunk-button:hover {
+  background: var(--gradient-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+}
+
+.godray {
+  position: absolute;
+  width: 150%;
+  height: 100px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: godray 8s infinite linear;
+  pointer-events: none;
+}
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: glow 3s infinite alternate;
+}
