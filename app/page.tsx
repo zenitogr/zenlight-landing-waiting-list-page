@@ -76,48 +76,48 @@ export default function Home() {
 
   return (
     <div className={`min-h-screen theme-transition ${theme}`}>
-      <div className="godray"></div>
-      <div className="godray" style={{ animationDelay: '4s' }}></div>
+      <div className="godray opacity-30"></div>
+      <div className="godray opacity-30" style={{ animationDelay: '4s' }}></div>
       
-      <div className="fixed top-4 right-4">
+      <div className="fixed top-6 right-6 z-10">
         <button
           onClick={toggleTheme}
-          className="cyberpunk-button px-6 py-2 rounded-lg inline-flex items-center gap-2"
+          className="cyberpunk-button px-6 py-2.5 rounded-lg inline-flex items-center gap-2 text-sm font-medium"
         >
           {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
         </button>
       </div>
 
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-        <main className="flex flex-col items-center row-start-2 gap-8 w-full max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="gradient-text text-4xl sm:text-6xl font-bold mb-4 animate-float">
+      <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+        <main className="flex flex-col items-center w-full max-w-4xl mx-auto py-12">
+          <div className="text-center mb-12">
+            <h1 className="gradient-text text-5xl sm:text-7xl font-bold mb-6 animate-float">
               Join the ZenLight Revolution
             </h1>
-            <p className="text-xl opacity-80">Experience the future of development</p>
+            <p className="text-xl sm:text-2xl opacity-80 mb-8">Experience the future of development</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md">
-            <div className="relative">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-md mb-12">
+            <div className="input-wrapper">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                className="w-full px-6 py-3 rounded-lg bg-opacity-20 backdrop-blur-sm border-2 border-opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-dark dark:bg-black dark:bg-opacity-30"
+                className="custom-input w-full px-6 py-4 rounded-lg bg-opacity-20 border-2 border-opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-dark text-lg"
                 disabled={status === 'loading'}
               />
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                className="cyberpunk-button mt-4 w-full py-3 px-6 rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {status === 'loading' ? 'Joining...' : 'Join Waiting List'}
-              </button>
             </div>
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="cyberpunk-button py-4 px-8 rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {status === 'loading' ? 'Joining...' : 'Join Waiting List'}
+            </button>
             {message && (
-              <div className={`success-animation mt-4 p-4 rounded-lg text-center ${
+              <div className={`success-animation p-4 rounded-lg text-center ${
                 status === 'success' 
                   ? 'bg-green-500 bg-opacity-20 text-green-300' 
                   : 'bg-red-500 bg-opacity-20 text-red-300'
@@ -127,15 +127,15 @@ export default function Home() {
             )}
           </form>
 
-          <div className="mt-8 text-center">
-            <h2 className="gradient-text text-2xl font-bold mb-4">Skip the Waiting List</h2>
-            <p className="mb-4">Support our development with a minimum €5 donation</p>
+          <div className="text-center">
+            <h2 className="gradient-text text-2xl sm:text-3xl font-bold mb-4">Skip the Waiting List</h2>
+            <p className="text-lg mb-6 opacity-80">Support our development with a minimum €5 donation</p>
             <div className="flex flex-wrap gap-4 justify-center">
               <a
                 href="https://ko-fi.com/zenlight"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cyberpunk-button px-6 py-3 rounded-lg inline-flex items-center gap-2"
+                className="cyberpunk-button px-8 py-3 rounded-lg inline-flex items-center gap-2"
               >
                 <span>☕ Support on Ko-fi</span>
               </a>
@@ -143,7 +143,7 @@ export default function Home() {
                 href="https://revolut.me/zenlight"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="cyberpunk-button px-6 py-3 rounded-lg inline-flex items-center gap-2"
+                className="cyberpunk-button px-8 py-3 rounded-lg inline-flex items-center gap-2"
               >
                 <span>💳 Donate via Revolut</span>
               </a>
@@ -151,7 +151,7 @@ export default function Home() {
           </div>
         </main>
 
-        <footer className="flex flex-wrap items-center justify-center row-start-3 gap-6 text-sm opacity-70">
+        <footer className="flex flex-wrap items-center justify-center gap-6 text-sm opacity-70 pb-6">
           <p>© 2024 ZenLight. All rights reserved.</p>
         </footer>
       </div>
