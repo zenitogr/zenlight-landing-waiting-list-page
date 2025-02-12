@@ -1,160 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import './styles/animations.css';
-import './styles/theme.css';
-import confetti from 'canvas-confetti';
+import { Banner } from "@/components/banner";
+import { WaitingListForm } from "@/components/waiting-list-form";
+import { DonationSection } from "@/components/donation-section";
+import { useContext } from "react";
+import { ThemeContext } from "./theme-context";
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [message, setMessage] = useState("");
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  const createConfetti = () => {
-    const duration = 3000;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-    const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
-
-    const interval: any = setInterval(() => {
-      const timeLeft = duration - Date.now();
-
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
-
-      const particleCount = 50 * (timeLeft / duration);
-
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-      });
-      confetti({
-        ...defaults,
-        particleCount,
-        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-      });
-    }, 250);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
-    
-    try {
-      const response = await fetch('/api/waiting-list', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setStatus('success');
-        setMessage('Thank you for joining our waiting list!');
-        setEmail('');
-        createConfetti();
-      } else {
-        setStatus('error');
-        setMessage(data.error || 'Something went wrong. Please try again.');
-      }
-    } catch (error) {
-      setStatus('error');
-      setMessage('Failed to submit. Please try again.');
-    }
-  };
-
+  const { theme } = useContext(ThemeContext);
+  
   return (
-    <div className={`min-h-screen theme-transition ${theme}`}>
-      <div className="godray opacity-30"></div>
-      <div className="godray opacity-30" style={{ animationDelay: '4s' }}></div>
-      
-      <div className="fixed top-6 right-6 z-10">
-        <button
-          onClick={toggleTheme}
-          className="cyberpunk-button px-6 py-2.5 rounded-lg inline-flex items-center gap-2 text-sm font-medium"
-        >
-          {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
-        </button>
-      </div>
-
-      <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-        <main className="flex flex-col items-center w-full max-w-4xl mx-auto py-12">
-          <div className="text-center mb-12">
-            <h1 className="gradient-text text-5xl sm:text-7xl font-bold mb-6 animate-float">
-              Join the ZenLight Revolution
-            </h1>
-            <p className="text-xl sm:text-2xl opacity-80 mb-8">Experience the future of development</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-md mb-12">
-            <div className="input-wrapper">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="custom-input w-full px-6 py-4 rounded-lg bg-opacity-20 border-2 border-opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-dark text-lg"
-                disabled={status === 'loading'}
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={status === 'loading'}
-              className="cyberpunk-button py-4 px-8 rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {status === 'loading' ? 'Joining...' : 'Join Waiting List'}
-            </button>
-            {message && (
-              <div className={`success-animation p-4 rounded-lg text-center ${
-                status === 'success' 
-                  ? 'bg-green-500 bg-opacity-20 text-green-300' 
-                  : 'bg-red-500 bg-opacity-20 text-red-300'
-              }`}>
-                {message}
-              </div>
-            )}
-          </form>
-
-          <div className="text-center">
-            <h2 className="gradient-text text-2xl sm:text-3xl font-bold mb-4">Skip the Waiting List</h2>
-            <p className="text-lg mb-6 opacity-80">Support our development with a minimum €5 donation</p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                href="https://ko-fi.com/zenlight"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cyberpunk-button px-8 py-3 rounded-lg inline-flex items-center gap-2"
-              >
-                <span>☕ Support on Ko-fi</span>
-              </a>
-              <a
-                href="https://revolut.me/zenlight"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cyberpunk-button px-8 py-3 rounded-lg inline-flex items-center gap-2"
-              >
-                <span>💳 Donate via Revolut</span>
-              </a>
-            </div>
-          </div>
-        </main>
-
-        <footer className="flex flex-wrap items-center justify-center gap-6 text-sm opacity-70 pb-6">
-          <p>© 2024 ZenLight. All rights reserved.</p>
-        </footer>
-      </div>
-    </div>
+    <>
+      <Banner />
+      <WaitingListForm theme={theme} />
+      <DonationSection />
+    </>
   );
 }

@@ -63,7 +63,8 @@
   border-image: var(--gradient-primary);
   border-image-slice: 1;
   transition: all 0.3s ease;
-  text-shadow: 0 0 5px currentColor;
+  color: white !important;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
   box-shadow: var(--shadow-neon);
   position: relative;
   overflow: hidden;
