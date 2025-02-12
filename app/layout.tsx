@@ -4,6 +4,7 @@ import "./styles/animations.css";
 import "./styles/theme.css";
 import { metadata } from "./metadata";
 import { RootLayoutContent } from "./root-layout";
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}>
+        <Toaster position="top-center" />
         <RootLayoutContent>
           {children}
         </RootLayoutContent>

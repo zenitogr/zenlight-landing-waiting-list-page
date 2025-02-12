@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import confetti from 'canvas-confetti';
+import { ClipLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
 
 interface WaitingListFormProps {
   theme: 'light' | 'dark';
@@ -9,7 +11,7 @@ interface WaitingListFormProps {
 
 export function WaitingListForm({ theme }: WaitingListFormProps) {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'validating' | 'submitting' | 'checking' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState("");
 
   const createConfetti = () => {
@@ -42,10 +44,27 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus('loading');
+    
+    // Reset states
+    setStatus('validating');
+    setMessage("Validating your email...");
+    toast.loading("Validating email format...");
+
+    // Basic email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus('error');
+      setMessage('Please enter a valid email address.');
+      toast.error("Invalid email format");
+      return;
+    }
+
+    // Update status to submitting
+    setStatus('submitting');
+    setMessage("Submitting your email to the waiting list...");
+    toast.loading("Adding you to the waiting list...");
     
     try {
-      const response = await fetch('/api/waiting-list', {
+      const response = await fetch('/api/waitinglist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,20 +74,32 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
 
       const data = await response.json();
 
+      // Update status to checking
+      setStatus('checking');
+      setMessage("Verifying your subscription...");
+      toast.loading("Verifying your subscription...");
+
       if (response.ok) {
         setStatus('success');
-        setMessage('Thank you for joining our waiting list!');
+        setMessage('🎉 Welcome aboard! You\'ve successfully joined the waiting list. We\'ll keep you updated on our progress!');
         setEmail('');
         createConfetti();
+        toast.success("Successfully joined the waiting list!");
       } else {
         setStatus('error');
-        setMessage(data.error || 'Something went wrong. Please try again.');
+        const errorMessage = data.error || 'Something went wrong. Please try again.';
+        setMessage(errorMessage);
+        toast.error(errorMessage);
       }
     } catch {
       setStatus('error');
-      setMessage('Failed to submit. Please try again.');
+      const errorMessage = 'Failed to submit. Please try again.';
+      setMessage(errorMessage);
+      toast.error(errorMessage);
     }
   };
+
+  const isLoading = ['validating', 'submitting', 'checking'].includes(status);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-6 w-full max-w-md">
@@ -79,23 +110,36 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           required
-          className="custom-input w-[320px] px-6 py-4 rounded-lg bg-opacity-20 border-2 border-opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-dark text-lg"
-          disabled={status === 'loading'}
+          className={`custom-input w-[320px] px-6 py-4 rounded-lg bg-opacity-20 border-2 border-opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-dark text-lg ${
+            status === 'error' ? 'border-red-500' : ''
+          }`}
+          disabled={isLoading}
         />
         <button
           type="submit"
-          disabled={status === 'loading'}
-          className="cyberpunk-button w-[320px] py-4 px-8 rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={isLoading}
+          className="cyberpunk-button w-[320px] py-4 px-8 rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed relative"
         >
-          {status === 'loading' ? 'Joining...' : 'Join Waiting List'}
+          <span className={isLoading ? 'opacity-0' : 'opacity-100'}>
+            Join Waiting List
+          </span>
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <ClipLoader size={24} color={theme === 'light' ? '#000000' : '#ffffff'} />
+            </div>
+          )}
         </button>
       </div>
       {message && (
-        <div className={`success-animation p-4 rounded-lg text-center ${
-          status === 'success' 
-            ? `bg-green-500 bg-opacity-20 ${theme === 'light' ? 'text-black' : 'text-white'}` 
-            : 'bg-red-500 bg-opacity-20 text-red-300'
-        }`}>
+        <div 
+          className={`transition-all duration-300 p-4 rounded-lg text-center ${
+            status === 'success' 
+              ? `bg-green-500 bg-opacity-20 ${theme === 'light' ? 'text-black' : 'text-white'}` 
+              : status === 'error'
+              ? 'bg-red-500 bg-opacity-20 text-red-300'
+              : `bg-blue-500 bg-opacity-20 ${theme === 'light' ? 'text-black' : 'text-white'}`
+          }`}
+        >
           {message}
         </div>
       )}

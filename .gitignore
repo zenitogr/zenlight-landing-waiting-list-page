@@ -42,3 +42,4 @@ sendgrid.env
 next-env.d.ts
 
 sendgrid.env
+.vercel
