@@ -18,7 +18,7 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
 
     const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-    const interval: any = setInterval(() => {
+    const interval: NodeJS.Timeout = setInterval(() => {
       const timeLeft = duration - Date.now();
 
       if (timeLeft <= 0) {
@@ -64,7 +64,7 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
         setStatus('error');
         setMessage(data.error || 'Something went wrong. Please try again.');
       }
-    } catch (error) {
+    } catch {
       setStatus('error');
       setMessage('Failed to submit. Please try again.');
     }

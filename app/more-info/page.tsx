@@ -23,7 +23,7 @@ export default function MoreInfo() {
             <h2 className="text-2xl font-semibold mb-4 text-purple-400">Our Vision</h2>
             <p className="text-lg leading-relaxed">
               ZenLight is a revolutionary social network focused on self-improvement and societal growth. 
-              We're building a space where meaningful connections and personal development take center stage.
+              We&apos;re building a space where meaningful connections and personal development take center stage.
             </p>
           </section>
 
@@ -39,7 +39,7 @@ export default function MoreInfo() {
               <div>
                 <h3 className="text-xl font-medium mb-2 text-pink-400">Dedicated Marketplace</h3>
                 <p className="text-lg leading-relaxed">
-                  Find valuable resources, promotions, and opportunities in our dedicated marketplace - the only place where you'll see promotional content.
+                  Find valuable resources, promotions, and opportunities in our dedicated marketplace - the only place where you&apos;ll see promotional content.
                 </p>
               </div>
             </div>
