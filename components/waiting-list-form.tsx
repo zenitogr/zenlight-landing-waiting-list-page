@@ -45,26 +45,32 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Dismiss any existing toasts
+    toast.dismiss();
+    
     // Reset states
     setStatus('validating');
     setMessage("Validating your email...");
-    toast.loading("Validating email format...");
+    const validateToast = toast.loading("Validating email format...");
+
+    console.log('Submitting email:', email);
 
     // Basic email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setStatus('error');
       setMessage('Please enter a valid email address.');
-      toast.error("Invalid email format");
+      toast.error("Invalid email format", { id: validateToast });
       return;
     }
 
     // Update status to submitting
     setStatus('submitting');
     setMessage("Submitting your email to the waiting list...");
-    toast.loading("Adding you to the waiting list...");
+    const submitToast = toast.loading("Adding you to the waiting list...", { id: validateToast });
     
     try {
-      const response = await fetch('/api/waitinglist', {
+      console.log('Sending request to API...');
+      const response = await fetch('/api/waiting-list', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,29 +79,31 @@ export function WaitingListForm({ theme }: WaitingListFormProps) {
       });
 
       const data = await response.json();
+      console.log('API response:', data);
 
       // Update status to checking
       setStatus('checking');
       setMessage("Verifying your subscription...");
-      toast.loading("Verifying your subscription...");
+      toast.loading("Verifying your subscription...", { id: submitToast });
 
       if (response.ok) {
         setStatus('success');
         setMessage('🎉 Welcome aboard! You\'ve successfully joined the waiting list. We\'ll keep you updated on our progress!');
         setEmail('');
         createConfetti();
-        toast.success("Successfully joined the waiting list!");
+        toast.success("Successfully joined the waiting list!", { id: submitToast });
       } else {
         setStatus('error');
         const errorMessage = data.error || 'Something went wrong. Please try again.';
         setMessage(errorMessage);
-        toast.error(errorMessage);
+        toast.error(errorMessage, { id: submitToast });
       }
-    } catch {
+    } catch (error: unknown) {
+      console.error('Form submission error:', error);
       setStatus('error');
-      const errorMessage = 'Failed to submit. Please try again.';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to submit. Please try again.';
       setMessage(errorMessage);
-      toast.error(errorMessage);
+      toast.error(errorMessage, { id: submitToast });
     }
   };
 
