@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import type { DatabaseError } from '@/app/types/errors';
+import { sendWelcomeEmail } from '@/lib/sendgrid';
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,13 @@ export async function POST(request: Request) {
     });
 
     console.log('Saved subscriber:', subscriber);
+
+    // Send welcome email
+    const emailResult = await sendWelcomeEmail(email);
+    if (!emailResult.success) {
+      console.error('Failed to send welcome email:', emailResult.error);
+      // Note: We don't return an error here as the user is already registered
+    }
 
     return NextResponse.json({ 
       success: true, 
